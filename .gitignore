@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*
+.DS_Store
+._*
+*.log
+# discarded 3D cockpit experiment (large binaries, not part of the site)
+blender/
+# agent coordination data
+.swarm/

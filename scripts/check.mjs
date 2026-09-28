@@ -1,0 +1,17 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];const requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+await page.goto('http://localhost:3006');await page.waitForTimeout(1200);await page.screenshot({path:'/tmp/hatodik-desktop.png'});
+assert.equal(await page.locator('canvas').count(),0);assert.equal(requests.some(u=>/\.(glb|hdr)(\?|$)/.test(u)),false);
+await page.getByRole('tab',{name:'Motorkerékpár'}).click();for(const id of ['A']){const d=await page.evaluate(id=>[...document.querySelectorAll('.bay-'+id+' .wheel')].map(w=>[parseFloat(getComputedStyle(w).animationDuration),w.querySelector('circle').r.baseVal.value]),id);for(const[t,r]of d)assert.ok(Math.abs(t-2*Math.PI*r/60*.45)<.01,'wheel slips');}await page.getByRole('heading',{name:'Két kerék. Végtelen élmény.'}).waitFor();
+await page.locator('#oktatok').scrollIntoViewIfNeeded();await page.waitForTimeout(1800);assert.equal(await page.locator('.people article').first().evaluate(e=>getComputedStyle(e).opacity),'1');await page.screenshot({path:'/tmp/hatodik-sections.png'});
+const gb=await page.evaluate(()=>{const g=document.querySelector('#utvonal');return g.offsetTop+g.offsetHeight-innerHeight});await page.evaluate(y=>scrollTo(0,y),gb);await page.waitForTimeout(700);
+assert.equal(await page.locator('.gear-steps article.on h3').textContent(),'Hatodik sebesség.');assert.equal(await page.locator('.gate text.on').textContent(),'6');
+assert.ok(await page.locator('.news-card').count()>=1);assert.ok(await page.evaluate(()=>document.querySelector('#hirek').getBoundingClientRect().top<document.querySelector('#kepzesek').getBoundingClientRect().top));
+await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(600);if(await page.locator('.announce').count()){await page.locator('.announce').click();await page.waitForTimeout(1200);assert.ok(await page.evaluate(()=>Math.abs(document.querySelector('#hirek').getBoundingClientRect().top)<120));}
+await page.locator('summary').first().click();assert.equal(await page.locator('details').first().getAttribute('open'),'');
+await page.setViewportSize({width:390,height:844});await page.goto('http://localhost:3006');await page.waitForTimeout(1000);await page.screenshot({path:'/tmp/hatodik-mobile.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+await page.getByRole('button',{name:'Menü',exact:true}).click();await page.getByRole('navigation').getByText('Képzéseink').click();assert.equal(await page.getByRole('button',{name:'Menü',exact:true}).getAttribute('aria-expanded'),'false');
+await page.emulateMedia({reducedMotion:'reduce'});await page.reload();assert.equal(await page.locator('.hero h1 .line>span').first().evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await page.locator('.people article').first().evaluate(e=>getComputedStyle(e).opacity),'1');
+assert.deepEqual(errors,[]);console.log('Passed: desktop/mobile, gearbox reaches 6th, news, hero notice links to news, no 3D requests, reveals, reduced motion, course tabs, FAQ, mobile navigation, overflow, browser errors.');await browser.close();
