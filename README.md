@@ -11,4 +11,4 @@ School content and instructor photographs: https://www.hatodik-sebesseg.hu/ (wit
 
 The discarded cockpit experiment lives in `blender/` locally only (git-ignored, large binaries). Its third-party assets were from Poly Haven (CC0).
 
-**News / notices:** edit `content/news.js` (instructions in Hungarian at the top). An entry with `urgent: true` also shows as a dismissible notice at the bottom of the screen. Entries marked `sample: true` are placeholders — delete them before going live.
+**News / notices:** edit at the unlinked page `/szerkesztes` (password login). Set `ADMIN_PASSWORD` in `.env.local` or the server environment; changing it logs everyone out. Edits are saved to `content/news.json`, so the site must run on a server with a writable disk (`npm run build && npm start`), not serverless hosting. An entry marked *Kiemelt* (urgent) also shows as a dismissible notice at the bottom of the screen, and only one can be urgent at a time. Entries marked *Minta* (sample) are placeholders, so delete them before going live.

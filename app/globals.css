@@ -414,3 +414,20 @@ footer div{display:flex;gap:22px}footer a:hover{color:var(--red)}
  [data-reveal]{opacity:1;transform:none}
  .hero-inner{transform:none;opacity:1}
 }
+
+/* Hidden news editor (/szerkesztes) */
+.admin{max-width:760px;margin:0 auto;padding:40px 16px 80px}
+.admin h1{font-family:Archivo,sans-serif;font-size:32px;margin:0}
+.admin h2{font-size:18px;margin:40px 0 12px}
+.admin-head{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.admin-head h1{flex:1}
+.admin-head a{text-decoration:underline}
+.admin-card{display:grid;justify-items:start;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.admin-login{max-width:380px;margin:15vh auto 0}
+.admin-row{justify-self:stretch;display:flex;gap:12px;flex-wrap:wrap;align-items:end}.admin-row>label{flex:1;min-width:160px}
+.admin label{justify-self:stretch;display:grid;gap:4px;font-size:14px;font-weight:500}
+.admin label.check{display:flex;align-items:center;gap:8px;font-weight:400}
+.admin input:not([type=checkbox]),.admin select,.admin textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%}
+.admin button{padding:10px 18px;border:0;border-radius:8px;background:var(--navy);color:#fff;font-weight:600}
+.admin button.danger{background:transparent;color:var(--red);border:1px solid var(--red)}
+.admin button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.admin-error{color:var(--red);margin:0}

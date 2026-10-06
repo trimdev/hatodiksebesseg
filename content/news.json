@@ -1,0 +1,50 @@
+{
+ "office": [
+  [
+   "Ügyfélfogadás",
+   "Előzetes telefonos egyeztetés alapján"
+  ],
+  [
+   "Telefon",
+   "+36 70 325 8258"
+  ],
+  [
+   "Cím",
+   "5000 Szolnok, Batthyány út 16/A. (a Pláza mellett)"
+  ]
+ ],
+ "news": [
+  {
+   "id": "ca562cfb-45af-4e7d-a937-e85845104bbd",
+   "date": "2026-07-17",
+   "tag": "Vizsga",
+   "title": "Változtak a B kategóriás vizsgadíjak",
+   "text": "2026. július 17-től a B kategóriás elméleti vizsga díja 5 100 Ft (korábban 4 600 Ft), a gyakorlati vizsgáé 12 200 Ft (korábban 11 000 Ft)."
+  },
+  {
+   "id": "c824c5f4-7215-42ad-976e-e80686cdbffc",
+   "date": "2026-10-20",
+   "tag": "Nyitvatartás",
+   "urgent": true,
+   "sample": true,
+   "title": "Október 23-án zárva tartunk",
+   "text": "A nemzeti ünnep miatt az iroda zárva tart, és aznap nincs gyakorlati óra. Október 24-től a megszokott rend szerint várunk."
+  },
+  {
+   "id": "ce1f60af-eae7-4078-8a52-3d0b92dfb272",
+   "date": "2026-09-15",
+   "tag": "Fontos",
+   "sample": true,
+   "title": "Betegség miatt elmaradó órák",
+   "text": "Egyik oktatónk betegsége miatt a héten néhány gyakorlati óra elmarad. Az érintett tanulókat telefonon keressük új időponttal."
+  },
+  {
+   "id": "33655720-a7de-4b4f-a999-32bc619a2f0e",
+   "date": "2026-09-01",
+   "tag": "Tanfolyam",
+   "sample": true,
+   "title": "Szeptemberben indul az új KRESZ-tanfolyam",
+   "text": "Tantermi és online formában is csatlakozhatsz. A részletekért és a pontos kezdésért hívj minket."
+  }
+ ]
+}
