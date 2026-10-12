@@ -1,9 +1,9 @@
 'use client';
 import {useState,useEffect,useRef} from 'react';
+import {flushSync} from 'react-dom';
+import Link from 'next/link';
+import {Arrow} from './chrome';
 
-const old='https://www.hatodik-sebesseg.hu';
-const Arrow=()=><span className="arr" aria-hidden="true">↗</span>;
-const nav=[['Aktuális','#hirek'],['Képzéseink','#kepzesek'],['Út a jogsiig','#utvonal'],['Oktatóink','#oktatok'],['Kérdések','#kerdesek']];
 const statement='Nem kell mindent tudnod az elején. Csak hozd a kíváncsiságod – a többit együtt tanuljuk meg, a saját tempódban.';
 const courses={
  B:{name:'Személyautó',kind:'B kategória',title:'Ülj a vezetőülésbe.',text:'A hétköznapi szabadság a volán mögött kezdődik. Érthető elmélet, személyre szabott gyakorlat és egy oktató, akire számíthatsz.',items:['Online vagy tantermi KRESZ','Manuális vagy automata váltó','Modern, klimatizált autók','Rugalmas időbeosztás']},
@@ -17,7 +17,7 @@ const gears=[
  ['Forgalom','Irány a város.','Szolnok utcáin, egyre több önállósággal. Az oktatód melletted ül, de a döntés már a tiéd.'],
  ['Forgalmi vizsga','Hatodik sebesség.','Egy utolsó, magabiztos kör – és már te vezetsz. Szabadon, bárhová.'],
 ];
-const faqs=[['Tanulhatok online KRESZ-t?','Igen, e-learning képzést is választhatsz a tantermi oktatás helyett. Igény esetén személyes konzultációval is segítünk.'],['Van lehetőség részletfizetésre?','Igen, kamatmentes részletfizetés is elérhető. A hozzád illő ütemezést a beiratkozáskor egyeztetjük.'],['Automata autóval is tanulhatok?','Igen, igény esetén automata váltós autóval is folyik oktatás. Az elérhetőségről érdeklődj az irodánknál.'],['Mire van szükségem a beiratkozáshoz?','A jelentkezés előtt kérjük, szerezd be az orvosi alkalmassági igazolást. A szükséges iratokról és a választott kategória feltételeiről telefonon adunk pontos tájékoztatást.'],['Középiskolában már letettem a KRESZ-t. Mi a teendő?','Nálunk a gyakorlati képzéssel folytathatod. Hívj minket, és megbeszéljük a következő lépést.']];
+const faqs=[['Tanulhatok online KRESZ-t?','Igen, e-learning képzést is választhatsz a tantermi oktatás helyett. Igény esetén személyes konzultációval is segítünk.'],['Van lehetőség részletfizetésre?','Igen, kamatmentes részletfizetés is elérhető. A hozzád illő ütemezést a beiratkozáskor egyeztetjük.'],['Automata autóval is tanulhatok?','Igen, igény esetén automata váltós autóval is folyik oktatás. Az elérhetőségről érdeklődj az irodánknál.'],['Mire van szükségem a beiratkozáshoz?','A jelentkezés előtt kérjük, szerezd be az orvosi alkalmassági igazolást. A szükséges iratokról és a választott kategória feltételeiről telefonon adunk pontos tájékoztatást.'],['Középiskolában végeztem a KRESZ-tanfolyamot. Mi a teendő?','Már csak pár lépés választ el a jogosítványtól: töltsd le a Kréta rendszerből az e-jogsi igazolást, küldd el nekünk e-mailben, válassz a fizetési lehetőségek közül (részletfizetés is van!), és már kezdheted is a vezetést – várakozás nélkül.'],['Öcsödön lakom. Honnan indulhat a gyakorlati óra?','Nálunk már a kunszentmártoni indulás is elérhető a gyakorlati oktatás során. Öcsödön és Mesterszálláson tantermi KRESZ-tanfolyamot is indítunk.'],['Adhatok ajándékba jogosítványt?','Igen. Különböző programcsomagokból választhatsz az utalványhoz – keress minket e-mailben vagy személyesen.']];
 const months=['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'];
 const fmt=d=>{const[y,m,day]=d.split('-');return{day:+day,month:months[m-1],full:`${y}. ${months[m-1]} ${+day}.`}};
 
@@ -43,10 +43,13 @@ function Vehicle({type}){
   <line className="road" x1="-900" x2="1320" y1={type==='B'?157:161} y2={type==='B'?157:161} style={{'--road':ROAD_T+'s'}}/>
   <g className="shadow"><ellipse cx="210" cy={type==='B'?156:160} rx="190" ry="6"/></g>
   {type==='B'?<g className="body">
+   {/* drawn facing left; mirrored so it faces the way it drives (wheels sit symmetric, so they stay outside the flip) */}
+   <g transform="matrix(-1 0 0 1 420 0)">
    <rect x="196" y="24" width="56" height="14" rx="3" className="accent-fill"/>
    <path d="M28 128V104Q30 90 48 86L118 78 160 44Q168 38 180 38H276Q292 38 302 48L338 80 376 88Q394 92 396 108V128H352A34 34 0 0 0 284 128H136A34 34 0 0 0 68 128Z"/>
    <path className="glass" d="M130 78 166 48Q172 44 180 44H228V78ZM238 44H272Q284 44 292 52L318 78H238Z"/>
    <path d="M234 84V122M250 94H266M378 96 394 100M30 98H42"/><path className="accent" d="M52 112H382"/>
+   </g>
    <Wheel x={102} y={128} r={28}/><Wheel x={318} y={128} r={28}/>
   </g>:<g className="body">
    <path d="M118 74Q150 64 182 76L184 86Q150 88 124 86ZM118 74 92 66 98 80Z"/>
@@ -61,19 +64,16 @@ function Vehicle({type}){
 
 export default function Site({news,office}){
  const feed=[...news].sort((a,b)=>b.date.localeCompare(a.date)),urgent=feed.find(n=>n.urgent);
- const[menu,setMenu]=useState(false);const[course,setCourse]=useState('B');const[scrolled,setScrolled]=useState(false);
+ const[course,setCourse]=useState('B');
  const[gear,setGear]=useState(1);const box=useRef(null);
 
  useEffect(()=>{
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-  document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
   const words=document.querySelector('.statement'),hero=document.querySelector('.hero'),gb=box.current;
   const knob=gb.querySelector('.knob'),needle=gb.querySelector('.needle'),rpm=gb.querySelector('.rpm-val'),kmh=gb.querySelector('.kmh-val');
   const prog=(el,start,end)=>{const r=el.getBoundingClientRect();return Math.min(1,Math.max(0,(innerHeight*start-r.top)/(innerHeight*(start-end))))};
   let raf=0;
   const tick=()=>{raf=0;
-   setScrolled(scrollY>40);
    if(words)words.style.setProperty('--p',reduce?1:prog(words,.85,.25).toFixed(3));
    if(hero&&!reduce)hero.style.setProperty('--hy',Math.min(scrollY,innerHeight).toFixed(0));
    const r=gb.getBoundingClientRect();target=Math.min(1,Math.max(0,-r.top/(gb.offsetHeight-innerHeight)))*5;
@@ -95,30 +95,12 @@ export default function Site({news,office}){
   };
   const onScroll=()=>{if(!raf)raf=requestAnimationFrame(tick)};
   tick();addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);
-  const mags=reduce||matchMedia('(pointer: coarse)').matches?[]:[...document.querySelectorAll('.magnetic')];
-  const move=e=>{const b=e.currentTarget,r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3}px)`};
-  const leave=e=>{e.currentTarget.style.transform=''};
-  mags.forEach(b=>{b.addEventListener('pointermove',move);b.addEventListener('pointerleave',leave)});
-  return()=>{io.disconnect();removeEventListener('scroll',onScroll);removeEventListener('resize',onScroll);cancelAnimationFrame(raf);cancelAnimationFrame(gRaf);mags.forEach(b=>{b.removeEventListener('pointermove',move);b.removeEventListener('pointerleave',leave)})};
+  return()=>{removeEventListener('scroll',onScroll);removeEventListener('resize',onScroll);cancelAnimationFrame(raf);cancelAnimationFrame(gRaf)};
  },[]);
-
- useEffect(()=>{if(!menu)return;
-  const close=e=>{if(e.type==='keydown'?e.key==='Escape':e.type==='resize'?innerWidth>1100:!e.target.closest('header'))setMenu(false)};
-  addEventListener('keydown',close);addEventListener('pointerdown',close);addEventListener('resize',close);
-  return()=>{removeEventListener('keydown',close);removeEventListener('pointerdown',close);removeEventListener('resize',close)};
- },[menu]);
 
  const goGear=n=>{const gb=box.current;scrollTo({top:gb.offsetTop+(gb.offsetHeight-innerHeight)*(n-1)/5+2,behavior:'smooth'})};
 
- return <div>
- <header className={scrolled?'scrolled':''}>
-  <a className="brand" href="#" aria-label="Hatodik Sebesség – kezdőlap"><span className="brand-mark">6</span><span className="brand-name">HATODIK SEBESSÉG<small>AUTÓSISKOLA · SZOLNOK</small></span></a>
-  <nav className={menu?'open':''} aria-label="Fő navigáció">{nav.map(([n,h])=><a key={h} href={h} onClick={()=>setMenu(false)}>{n}</a>)}<a className="nav-cta" href="#kapcsolat" onClick={()=>setMenu(false)}>Jelentkezem</a></nav>
-  <a className="button small magnetic" href="tel:+36703258258">+36 70 325 8258</a>
-  <button className="menu" aria-label="Menü" aria-expanded={menu} onClick={()=>setMenu(!menu)}><span/><span/><span/></button>
- </header>
-
- <main>
+ return <>
  <section className="hero">
   <div className="hero-road" aria-hidden="true"><div className="road-plane"><div className="road-dashes"/></div></div>
   <div className="hero-inner">
@@ -161,14 +143,14 @@ export default function Site({news,office}){
   <div className="section-top"><div><span className="eyebrow" data-reveal>02 — Válassz irányt</span><h2 data-reveal>Négy kerék<br/>vagy <em>kettő?</em></h2></div><p data-reveal>Válaszd ki, mivel indulnál – megmutatjuk, mit kapsz a képzésben.</p></div>
   <div className="garage" role="tablist" aria-label="Képzés típusa" data-reveal>
    {['B','A'].map(id=>{const k=courses[id],on=course===id;return <div key={id} className={'bay bay-'+id+(on?' on':'')}>
-    <button role="tab" id={'tab-'+id} aria-selected={on} aria-controls={'panel-'+id} className="bay-hit" onClick={()=>setCourse(id)}>
+    <button role="tab" id={'tab-'+id} aria-selected={on} aria-controls={'panel-'+id} className="bay-hit" onClick={e=>{const el=e.currentTarget,y=el.getBoundingClientRect().top;flushSync(()=>setCourse(id));scrollBy({top:el.getBoundingClientRect().top-y,behavior:'instant'})}}>
      <span className="bay-letter">{id}</span><span className="bay-name">{k.name}<small>{k.kind}</small></span><span className="bay-pick" aria-hidden="true">{on?'Kiválasztva':'Ezt választom'}</span>
     </button>
     <div className="bay-stage"><Vehicle type={id}/></div>
     <div className="bay-detail" role="tabpanel" id={'panel-'+id} aria-labelledby={'tab-'+id} inert={!on}>
      <h3>{k.title}</h3><p>{k.text}</p>
      <ul>{k.items.map((t,i)=><li key={t} style={{'--d':.35+i*.07+'s'}}>{t}</li>)}</ul>
-     <div className="course-actions"><a className="button red magnetic" href="#kapcsolat">Érdekel a képzés <Arrow/></a><a className="text-link light" href={old+'/'+id.toLowerCase()+'-kategorias-tanfolyamok-koltsegei/'} target="_blank" rel="noreferrer">Díjak <Arrow/></a></div>
+     <div className="course-actions"><a className="button red magnetic" href="/kapcsolat#jelentkezes">Érdekel a képzés <Arrow/></a><Link className="text-link light" href={'/'+id.toLowerCase()+'-kategorias-tanfolyamok-koltsegei'}>Díjak <Arrow/></Link></div>
     </div>
    </div>})}
   </div>
@@ -209,7 +191,7 @@ export default function Site({news,office}){
  </section>
 
  <section className="section instructors" id="oktatok">
-  <div className="section-top"><div><span className="eyebrow" data-reveal>04 — Jó kezekben vagy</span><h2 data-reveal>Valaki, aki mellett<br/><em>jó</em> vezetni tanulni.</h2></div><a className="text-link" href={old+'/oktatoink/'} target="_blank" rel="noreferrer" data-reveal>Minden oktatónk <Arrow/></a></div>
+  <div className="section-top"><div><span className="eyebrow" data-reveal>04 — Jó kezekben vagy</span><h2 data-reveal>Valaki, aki mellett<br/><em>jó</em> vezetni tanulni.</h2></div><Link className="text-link" href="/oktatoink" data-reveal>Mind a 24 oktatónk <Arrow/></Link></div>
   <div className="people">{[['anett','Dobos Anett','Volkswagen Golf · dízel'],['tiborne','Baranya Tiborné','Toyota Yaris · Honda Jazz automata'],['janos','Bercsényi János','Mazda 5 · dízel']].map(([img,n,car],i)=><article key={img} data-reveal style={{'--d':i*110+'ms'}}><div className="portrait"><img src={'/assets/'+img+'.jpg'} alt={n+' oktató'} loading="lazy"/><span className="portrait-tag">{car}</span></div><h3>{n}</h3><p>{car}</p></article>)}</div>
  </section>
 
@@ -231,9 +213,7 @@ export default function Site({news,office}){
    </div>
   </div>
  </section>
- </main>
 
 
- <footer><img className="original-logo" src="/assets/original-logo.png" alt="A Hatodik Sebesség autós emblémája"/><span>© {new Date().getFullYear()} Hatodik Sebesség Autósiskola Kft.</span><div><a href={old+'/adatkezelesi-tajekoztato/'}>Adatkezelés</a><a href={old+'/cegadatok/'}>Cégadatok</a><a href={old+'/adatkozles/'}>Adatközlés</a></div></footer>
- </div>;
+ </>;
 }
