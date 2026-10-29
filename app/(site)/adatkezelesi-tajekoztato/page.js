@@ -11,8 +11,8 @@ export default function Page(){
    <a className="button small magnetic pdf-btn" href="/docs/adatkezelesi-tajekoztato.pdf" target="_blank">PDF letöltése <Arrow/></a>
    <dl className="data-table">
     <div><dt>Adatkezelő</dt><dd>Hatodik Sebesség Autósiskola Kft., Szokola-Tóth Melinda ügyvezető, iskolavezető</dd></div>
-    <div><dt>Adatkezelő székhelye</dt><dd>5000 Szolnok, Mátyás király út 9. 2/6.</dd></div>
-    <div><dt>Adatkezelő postacíme</dt><dd>5000 Szolnok, Mátyás király út 9. 2/6.</dd></div>
+    <div><dt>Adatkezelő székhelye</dt><dd>5200 Törökszentmiklós, Kálmán Imre utca 3.</dd></div>
+    <div><dt>Adatkezelő postacíme</dt><dd>5200 Törökszentmiklós, Kálmán Imre utca 3.</dd></div>
     <div><dt>Telefonszám</dt><dd>+36 70 325 8258</dd></div>
     <div><dt>E-mail</dt><dd>hatodiksebessegsuli@gmail.com</dd></div>
     <div><dt>Adatkezelő honlapja</dt><dd>www.hatodik-sebesseg.hu</dd></div>

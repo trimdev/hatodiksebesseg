@@ -24,7 +24,7 @@ export default function Page(){
 
   <section className="section">
    <div className="banner" data-reveal><span className="banner-kicker">Nálunk</span><p>Sikeres KRESZ-vizsga után <em>azonnal</em> kezdhető a gyakorlati képzés!</p></div>
-   <div className="section-top"><div><span className="eyebrow" data-reveal>01 — Válaszd a ritmusod</span><h2 data-reveal>Tanteremben<br/>vagy <em>otthonról?</em></h2></div><p data-reveal>Bármelyiket választod, a tanfolyam után rövid várakozással vizsgázhatsz.</p></div>
+   <div className="section-top"><div><span className="eyebrow" data-reveal>01 — Válaszd a ritmusod</span><h2 data-reveal>Tanteremben<br/>vagy <em>otthonról?</em></h2></div><p data-reveal>Bármelyiket választod, a sikeres KRESZ-vizsga után azonnal kezdheted a gyakorlatot.</p></div>
    <div className="formats">{formats.map(([t,k,p,price],i)=><article key={t} data-reveal style={{'--d':i*100+'ms'}}><span className="format-kicker">{k}</span><h3>{t}</h3><p>{p}</p><div className="format-foot"><b>{price}</b><Link className="text-link" href="/b-kategorias-tanfolyamok-koltsegei">Részletek <Arrow/></Link></div></article>)}</div>
   </section>
 
@@ -39,7 +39,7 @@ export default function Page(){
   </section>
 
   <section className="section faq">
-   <div><span className="eyebrow" data-reveal>04 — Tudnivalók</span><h2 data-reveal>Jó tudni,<br/><em>mielőtt</em> indulsz.</h2><p data-reveal>Regisztráció a helyszínen vagy a Pláza melletti irodánkban.</p></div>
+   <div><span className="eyebrow" data-reveal>04 — Tudnivalók</span><h2 data-reveal>Jó tudni,<br/><em>mielőtt</em> indulsz.</h2></div>
    <div data-reveal>{notes.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true"/></summary><p>{a}</p></details>)}
     <details><summary>2026-tól változtak a vizsgadíjak<span aria-hidden="true"/></summary><div className="details-body">
      <p>A KAV Közlekedési Alkalmassági és Vizsgaközpont Nonprofit Kft. tájékoztatása szerint az építési és közlekedési miniszter 2026. április 20-án kelt határozata értelmében 2026. július 17-től módosulnak a vizsgáztatási, vizsgálati és egyéb szolgáltatási díjak. A díjtételek átlagosan 11%-kal változnak; a B kategóriás elméleti és gyakorlati vizsgák díjai több mint másfél évtizede változatlanok voltak.</p>

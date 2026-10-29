@@ -28,14 +28,14 @@ export function Header(){
  },[path]);
 
  useEffect(()=>{if(!menu)return;
-  const close=e=>{if(e.type==='keydown'?e.key==='Escape':e.type==='resize'?innerWidth>1100:!e.target.closest('header'))setMenu(false)};
+  const close=e=>{if(e.type==='keydown'?e.key==='Escape':e.type==='resize'?innerWidth>1280:!e.target.closest('header'))setMenu(false)};
   addEventListener('keydown',close);addEventListener('pointerdown',close);addEventListener('resize',close);
   return()=>{removeEventListener('keydown',close);removeEventListener('pointerdown',close);removeEventListener('resize',close)};
  },[menu]);
 
  return <header className={scrolled?'scrolled':''}>
-  <Link className="brand" href="/" aria-label="Hatodik Sebesség – kezdőlap"><span className="brand-mark">6</span><span className="brand-name">HATODIK SEBESSÉG<small>AUTÓSISKOLA · SZOLNOK</small></span></Link>
-  <nav className={menu?'open':''} aria-label="Fő navigáció">{nav.map(([n,h])=><Link key={h} href={h} aria-current={active(h,path)?'page':undefined} onClick={()=>setMenu(false)}>{n}</Link>)}<Link className="nav-cta" href="/kapcsolat#jelentkezes" onClick={()=>setMenu(false)}>Jelentkezem</Link></nav>
+  <Link className="brand" href="/" aria-label="Hatodik Sebesség – kezdőlap"><img className="brand-mark" src="/assets/original-logo.png" alt=""/><span className="brand-name">HATODIK SEBESSÉG<small>AUTÓSISKOLA · SZOLNOK</small></span></Link>
+  <nav className={menu?'open':''} aria-label="Fő navigáció">{nav.map(([n,h])=><Link key={h} href={h} aria-current={active(h,path)?'page':undefined} onClick={()=>setMenu(false)}>{n}</Link>)}<Link className="nav-hot" href="/online-jelentkezes" onClick={()=>setMenu(false)}>Online jelentkezés</Link><Link className="nav-cta" href="/kapcsolat#jelentkezes" onClick={()=>setMenu(false)}>Jelentkezem</Link></nav>
   <a className="button small magnetic" href={'tel:'+contact.tel}>{contact.phone}</a>
   <button className="menu" aria-label="Menü" aria-expanded={menu} onClick={()=>setMenu(!menu)}><span/><span/><span/></button>
  </header>;
@@ -52,7 +52,7 @@ export function Footer(){
    <div className="foot-brand"><img className="original-logo" src="/assets/original-logo.png" alt="A Hatodik Sebesség autós emblémája"/><p>Kapcsold a hatodik sebességet!<br/><em>Tanulj nálunk vezetni.</em></p><a className="phone" href={'tel:'+contact.tel}>{contact.phone}</a><a href={'mailto:'+contact.email}>{contact.email}</a></div>
    {cols.map(([h,ls])=><div key={h} className="foot-col"><span>{h}</span>{ls.map(([n,href])=><Link key={href} href={href}>{n}</Link>)}</div>)}
   </div>
-  <div className="foot-bottom"><span>© {new Date().getFullYear()} Hatodik Sebesség Autósiskola Kft.</span><span>Képzési engedély: KGHF/41568-1/2019-ITM · Felnőttképzési nyilvántartási szám: B/2020/003628</span></div>
+  <div className="foot-bottom"><span>© {new Date().getFullYear()} Hatodik Sebesség Autósiskola Kft.</span><span>Képzési engedély: KGHF/41568-1/2019-ITM · Felnőttképzési nyilvántartási szám: B/2020/003628</span><a className="credit" href="https://boostwithdata.hu" target="_blank" rel="noopener"><i>6</i> A weboldalt hatodikba kapcsolta: <b>Boost with Data</b> ↗</a></div>
  </footer>;
 }
 

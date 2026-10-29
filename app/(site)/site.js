@@ -3,6 +3,9 @@ import {useState,useEffect,useRef} from 'react';
 import {flushSync} from 'react-dom';
 import Link from 'next/link';
 import {Arrow} from './chrome';
+import {instructors} from '../../content/school';
+
+const heroPhotos=instructors.filter(i=>i.photo);
 
 const statement='Nem kell mindent tudnod az elején. Csak hozd a kíváncsiságod – a többit együtt tanuljuk meg, a saját tempódban.';
 const courses={
@@ -66,6 +69,9 @@ export default function Site({news,office}){
  const feed=[...news].sort((a,b)=>b.date.localeCompare(a.date)),urgent=feed.find(n=>n.urgent);
  const[course,setCourse]=useState('B');
  const[gear,setGear]=useState(1);const box=useRef(null);
+ const[photo,setPhoto]=useState(0);
+ useEffect(()=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const t=setInterval(()=>setPhoto(p=>(p+1)%heroPhotos.length),5000);return()=>clearInterval(t)},[]);
 
  useEffect(()=>{
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -112,7 +118,7 @@ export default function Site({news,office}){
     <div className="hero-actions rise" style={{'--d':'.7s'}}><a className="button red magnetic" href="#kepzesek">Megtalálom a képzésem <Arrow/></a><a className="ghost" href="#utvonal">Hogyan működik?</a></div>
    </div>
    <figure className="hero-photo">
-    <div className="photo-frame"><img src="/assets/anett.jpg" alt="Dobos Anett oktató a Hatodik Sebesség oktatóautójával" fetchPriority="high"/></div>
+    <div className="photo-frame">{heroPhotos.map((p,i)=><img key={p.photo} className={i===photo?'on':undefined} src={`/assets/oktatok/${p.photo}.jpg`} alt={i===photo?p.name+' oktató a Hatodik Sebesség oktatóautójával':''} aria-hidden={i!==photo||undefined} fetchPriority={i?undefined:'high'}/>)}</div>
     <div className="float-card one"><b>0%</b><span>kamatmentes<br/>részletfizetés</span></div>
     <div className="float-card two"><i className="pulse"/><span>Automata autó<br/>is választható</span></div>
    </figure>
@@ -120,7 +126,7 @@ export default function Site({news,office}){
   <a className="scroll-cue" href="#elmeny"><span>Görgess, és indulj el</span><i/></a>
  </section>
 
- <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0,1].map(k=><span key={k}>{['Online vagy tantermi KRESZ','Manuális és automata autók','Kamatmentes részletfizetés','Kis létszámú csoportok','Rugalmas időbeosztás','Rövid várakozási idő'].map(t=><b key={t}>{t}<i>6</i></b>)}</span>)}</div></div>
+ <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0,1].map(k=><span key={k}>{['Online vagy tantermi KRESZ','Manuális és automata autók','Kamatmentes részletfizetés','Kis létszámú csoportok','Rugalmas időbeosztás','Azonnal kezdhető gyakorlat'].map(t=><b key={t}>{t}<i>6</i></b>)}</span>)}</div></div>
 
  <section className="news" id="hirek" aria-labelledby="hirek-cim">
   <div className="news-head"><div><span className="eyebrow" data-reveal><i className="pulse"/>Aktuális</span><h2 id="hirek-cim" data-reveal>Friss hírek <em>az irodából.</em></h2></div><div className="news-side" data-reveal><p>Nyitvatartás, elmaradó órák, vizsgadíjak – minden, amiről tudnod kell.</p><div className="rail-nav">{[-1,1].map(d=><button key={d} aria-label={d<0?'Előző hírek':'Következő hírek'} onClick={()=>{const r=document.querySelector('.news-rail');r.scrollBy({left:d*r.clientWidth*.7,behavior:'smooth'})}}>{d<0?'←':'→'}</button>)}</div></div></div>
@@ -136,7 +142,7 @@ export default function Site({news,office}){
  <section className="section intro" id="elmeny">
   <span className="eyebrow" data-reveal>01 — Jó helyen kezdődik az utad</span>
   <p className="statement" aria-label={statement}>{statement.split(' ').map((w,i,a)=><span key={i} aria-hidden="true" style={{'--i':i,'--n':a.length}}>{w} </span>)}</p>
-  <div className="facts">{[['Kis csoportok','Több figyelem jut rád, és bátran kérdezhetsz.'],['Rugalmas órarend','Az órákat a te napirendedhez igazítjuk.'],['Modern autók','Klimatizált oktatóautók, manuális és automata váltóval.'],['Gyors gyakorlat','Tanfolyam után rövid várakozással vizsgázhatsz.']].map(([t,p],i)=><article key={t} data-reveal style={{'--d':i*90+'ms'}}><span className="fact-no">0{i+1}</span><h3>{t}</h3><p>{p}</p></article>)}</div>
+  <div className="facts">{[['Kis csoportok','Több figyelem jut rád, és bátran kérdezhetsz.'],['Rugalmas órarend','Az órákat a te napirendedhez igazítjuk.'],['Modern autók','Klimatizált oktatóautók, manuális és automata váltóval.'],['Gyors gyakorlat','Sikeres KRESZ-vizsga után azonnal, várakozás nélkül autóba ülhetsz!']].map(([t,p],i)=><article key={t} data-reveal style={{'--d':i*90+'ms'}}><span className="fact-no">0{i+1}</span><h3>{t}</h3><p>{p}</p></article>)}</div>
  </section>
 
  <section className="section courses" id="kepzesek">
@@ -154,7 +160,7 @@ export default function Site({news,office}){
     </div>
    </div>})}
   </div>
-  <p className="aside-note" data-reveal>Elsősegély-tanfolyam is indul nálunk, helyben vizsgáztatással.</p>
+  <p className="aside-note" data-reveal>Bármikor elérhető online elsősegély-tanfolyam! Tantermi képzésről érdeklődj elérhetőségeinken!</p>
  </section>
 
  <section className="gearbox" id="utvonal" ref={box} aria-label="Út a jogosítványig, hat lépésben">
