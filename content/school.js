@@ -164,3 +164,5 @@ export function statusAt(day,t){
  const next=day>=4?0:day+1;
  return{s:'closed',text:'Most zárva',sub:`${next===day+1?'Holnap':DAYS[next]+'n'} ${hm(hours[next][1])}-kor nyitunk`};
 }
+
+export const newsTags=['Fontos','Nyitvatartás','Vizsga','Tanfolyam','Hír'];

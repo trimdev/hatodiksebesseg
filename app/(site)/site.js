@@ -3,6 +3,7 @@ import {useState,useEffect,useRef} from 'react';
 import {flushSync} from 'react-dom';
 import Link from 'next/link';
 import {Arrow} from './chrome';
+import {News} from './news';
 import {instructors} from '../../content/school';
 
 const heroPhotos=instructors.filter(i=>i.photo);
@@ -21,8 +22,6 @@ const gears=[
  ['Forgalmi vizsga','Hatodik sebesség.','Egy utolsó, magabiztos kör – és már te vezetsz. Szabadon, bárhová.'],
 ];
 const faqs=[['Tanulhatok online KRESZ-t?','Igen, e-learning képzést is választhatsz a tantermi oktatás helyett. Igény esetén személyes konzultációval is segítünk.'],['Van lehetőség részletfizetésre?','Igen, kamatmentes részletfizetés is elérhető. A hozzád illő ütemezést a beiratkozáskor egyeztetjük.'],['Automata autóval is tanulhatok?','Igen, igény esetén automata váltós autóval is folyik oktatás. Az elérhetőségről érdeklődj az irodánknál.'],['Mire van szükségem a beiratkozáshoz?','A jelentkezés előtt kérjük, szerezd be az orvosi alkalmassági igazolást. A szükséges iratokról és a választott kategória feltételeiről telefonon adunk pontos tájékoztatást.'],['Középiskolában végeztem a KRESZ-tanfolyamot. Mi a teendő?','Már csak pár lépés választ el a jogosítványtól: töltsd le a Kréta rendszerből az e-jogsi igazolást, küldd el nekünk e-mailben, válassz a fizetési lehetőségek közül (részletfizetés is van!), és már kezdheted is a vezetést – várakozás nélkül.'],['Öcsödön lakom. Honnan indulhat a gyakorlati óra?','Nálunk már a kunszentmártoni indulás is elérhető a gyakorlati oktatás során. Öcsödön és Mesterszálláson tantermi KRESZ-tanfolyamot is indítunk.'],['Adhatok ajándékba jogosítványt?','Igen. Különböző programcsomagokból választhatsz az utalványhoz – keress minket e-mailben vagy személyesen.']];
-const months=['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'];
-const fmt=d=>{const[y,m,day]=d.split('-');return{day:+day,month:months[m-1],full:`${y}. ${months[m-1]} ${+day}.`}};
 
 // H-pattern: gear n → [column -1..1, row -1 top / 1 bottom]
 const gearPos=n=>[Math.floor((n-1)/2)-1,n%2?-1:1];
@@ -130,13 +129,7 @@ export default function Site({news,office}){
 
  <section className="news" id="hirek" aria-labelledby="hirek-cim">
   <div className="news-head"><div><span className="eyebrow" data-reveal><i className="pulse"/>Aktuális</span><h2 id="hirek-cim" data-reveal>Friss hírek <em>az irodából.</em></h2></div><div className="news-side" data-reveal><p>Nyitvatartás, elmaradó órák, vizsgadíjak – minden, amiről tudnod kell.</p><div className="rail-nav">{[-1,1].map(d=><button key={d} aria-label={d<0?'Előző hírek':'Következő hírek'} onClick={()=>{const r=document.querySelector('.news-rail');r.scrollBy({left:d*r.clientWidth*.7,behavior:'smooth'})}}>{d<0?'←':'→'}</button>)}</div></div></div>
-  <div className="news-rail" data-reveal>
-   <article className="office"><span className="office-live">Iroda</span><h3>Ügyfélfogadás</h3><dl>{office.map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl><a className="text-link light" href="tel:+36703258258">Hívj minket <Arrow/></a></article>
-   {feed.map((n,i)=>{const d=fmt(n.date);return <article key={n.id} className={'news-card'+(n.urgent?' urgent':'')}>
-    <div className="news-meta"><time dateTime={n.date}><b>{d.day}</b>{d.month}</time><span className={'tag tag-'+n.tag.toLowerCase()}>{n.tag}</span>{n.sample&&<span className="tag tag-minta">Minta</span>}</div>
-    <h3>{n.title}</h3><p>{n.text}</p><small>{d.full}</small>
-   </article>})}
-  </div>
+  <News news={news} office={office}/>
  </section>
 
  <section className="section intro" id="elmeny">

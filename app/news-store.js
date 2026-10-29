@@ -4,7 +4,7 @@ import {createHmac,timingSafeEqual} from 'node:crypto';
 
 // ponytail: JSON file on disk — needs a server with a writable filesystem (`next start`), not serverless; move to a DB if hosted on Vercel.
 const file=path.join(process.cwd(),'content/news.json');
-export const tags=['Fontos','Nyitvatartás','Vizsga','Tanfolyam','Hír'];
+export {newsTags as tags} from '../content/school';
 export const readNews=async()=>JSON.parse(await fs.readFile(file,'utf8'));
 export async function writeNews(data){const tmp=file+'.tmp';await fs.writeFile(tmp,JSON.stringify(data,null,1)+'\n');await fs.rename(tmp,file)}
 
