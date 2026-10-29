@@ -52,7 +52,7 @@ export function Footer(){
    <div className="foot-brand"><img className="original-logo" src="/assets/original-logo.png" alt="A Hatodik Sebesség autós emblémája"/><p>Kapcsold a hatodik sebességet!<br/><em>Tanulj nálunk vezetni.</em></p><a className="phone" href={'tel:'+contact.tel}>{contact.phone}</a><a href={'mailto:'+contact.email}>{contact.email}</a></div>
    {cols.map(([h,ls])=><div key={h} className="foot-col"><span>{h}</span>{ls.map(([n,href])=><Link key={href} href={href}>{n}</Link>)}</div>)}
   </div>
-  <div className="foot-bottom"><span>© {new Date().getFullYear()} Hatodik Sebesség Autósiskola Kft.</span><span>Képzési engedély: KGHF/41568-1/2019-ITM · Felnőttképzési nyilvántartási szám: B/2020/003628</span><a className="credit" href="https://boostwithdata.hu" target="_blank" rel="noopener"><i>6</i> A weboldalt hatodikba kapcsolta: <b>Boost with Data</b> ↗</a></div>
+  <div className="foot-bottom"><span>© {new Date().getFullYear()} Hatodik Sebesség Autósiskola Kft.</span><span>Képzési engedély: KGHF/41568-1/2019-ITM · Felnőttképzési nyilvántartási szám: B/2020/003628</span><a className="credit" href="https://boostwithdata.hu" target="_blank" rel="noopener"><i>6</i> A weboldalt hatodikba kapcsolta: <b>Boostwithdata Kft.</b> ↗</a></div>
  </footer>;
 }
 
